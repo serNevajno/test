@@ -1,0 +1,457 @@
+	<?if (isset($_GET["action"])){?>
+		<?if($_GET["action"] == "add"){?>
+			<script type="text/javascript">
+				function checkForm() {
+					var title = document.getElementById("title");
+					var meta_d = document.getElementById("meta_d");
+					var meta_k = document.getElementById("meta_k");
+					var date = document.getElementById("date");
+					if (!title.value) {
+						alert('Введите заголовок');
+						return false;
+					}
+					if (!meta_d.value) {
+						alert('Введите краткое описание');
+						return false;
+					}
+					if (!meta_k.value) {
+						alert('Введите ключевые слова');
+						return false;
+					}
+					if (!date.value) {
+						alert('Введите дату');
+						return false;
+					}
+				}
+				window.onload = function () {
+					var form = document.getElementById("myForm");
+					form.onsubmit = checkForm
+				}
+			</script>
+		<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="tabbable tabbable-custom">
+						<h2>Добавление галереи...</h2>
+						<br>
+						<form role="form" action="" enctype="multipart/form-data" method="POST" name="form" id="myForm">
+							<input name="func" type="hidden" value="gallery">
+							<input name="user_id" type="hidden" value="<?=$user["id"]?>">
+							<input name="cat" type="hidden" value="<?=$_GET["id"]?>">
+							<ul class="nav nav-tabs">
+								<li class="active">
+									<a href="#tab_0" data-toggle="tab">Элементы</a>
+								</li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active fontawesome-demo" id="tab_0">
+									<div class="form-body">
+													<div class="form-group">
+														<div class="checkbox-list">
+															Активность:&nbsp;  <input type="checkbox" value="1" id="active" name="active" checked> | 
+															Скрытый материал:&nbsp;  <input type="checkbox" value="1" name="status" checked> | 
+															Дата публикации:&nbsp;  <input type="text" name="date" id="date" value="<?=date("d.m.Y H:i:s")?>">
+														</div>
+													</div>	
+													<div class="form-group">
+														<label>Введите Назание <font color="red">*</font></label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+														<input type="text" class="form-control" id="title" name="title" placeholder="Название фото галереи">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Введите описание <font color="red">*</font></label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Описание" id="meta_d" name="meta_d">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Введите ключевые слова через запятую <font color="red">*</font></label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Ключевые слова" id="meta_k" name="meta_k">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label>Введите сопроводительный текст к галереи </label>
+														<div class="input-group">
+															<textarea class="form-control" rows="5" name="text" id="text"></textarea>
+															<script type="text/javascript">
+																CKEDITOR.replace( 'text' );
+															</script>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label>Введите символьный код ссылки (оставте пустым и он будет сгенерирован автоматически)</label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Введите символьный код ссылки (оставте пустым и он будет сгенерирован автоматически)" id="code" name="code">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Введите приоритет</label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-sort-amount-asc "></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Приоритет" id="priority" name="priority">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Выберете фотографии</label>
+															<div class="input-group">
+																<input type="file" class="default" multiple="true" name="filesToUpload[]" id="filesToUpload"/>
+															</div>
+													</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<button type="submit" class="btn blue" name="submit">Сохранить</button>
+								<button type="button" class="btn red" onClick='location.href="/adminius/index.php?code=gallery&id=<?=$_GET["id"]?>"'>Отмена</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		<?}elseif($_GET["action"] == "edit"){?>
+			<?
+			$id = clearData($_GET['id'], "i");
+			$sGallery = selectGallery($id);
+			?>
+			<script type="text/javascript">
+					function checkForm() {
+						var title = document.getElementById("title");
+						var meta_d = document.getElementById("meta_d");
+						var meta_k = document.getElementById("meta_k");
+						var date = document.getElementById("date");
+						if (!title.value) {
+							alert('Введите заголовок');
+							return false;
+						}
+						if (!meta_d.value) {
+							alert('Введите краткое описание');
+							return false;
+						}
+						if (!meta_k.value) {
+							alert('Введите ключевые слова');
+							return false;
+						}
+						if (!date.value) {
+							alert('Введите дату');
+							return false;
+						}
+					}
+					window.onload = function () {
+						var form = document.getElementById("myForm");
+						form.onsubmit = checkForm
+					}
+				</script>
+			<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="tabbable tabbable-custom">
+						<h2>Редактирование галереи...</h2>
+						<br>
+						<form role="form" action="" enctype="multipart/form-data" method="POST" name="form" id="myForm">
+							<input name="func" type="hidden" value="gallery">
+							<input name="id" type="hidden" value="<?=$id?>">
+							<input name="user_id" type="hidden" value="<?=$user["id"]?>">
+							<ul class="nav nav-tabs">
+								<li class="active">
+									<a href="#tab_0" data-toggle="tab">Элементы</a>
+								</li>
+								<li>
+									<a href="#tab_1" data-toggle="tab">Изображения</a>
+								</li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active fontawesome-demo" id="tab_0">
+									<div class="form-body">
+													<div class="form-group">
+														<div class="checkbox-list">
+															Активность:&nbsp;  <input type="checkbox" value="1" id="active" name="active" <?if ($sGallery['active'] == 1){?>checked<?}?>> | 
+															Скрытая галерея:&nbsp;  <input type="checkbox" value="1" name="status" <?if ($sGallery['status'] == 1){?>checked<?}?>> | 
+															Дата публикации:&nbsp;  <input type="text" name="date" id="date" value="<?=$sGallery['date']?>">
+														</div>
+													</div>	
+													<div class="form-group">
+														<label>Введите Назание <font color="red">*</font></label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+														<input type="text" class="form-control" id="title" name="title" placeholder="Название фото галереи" value="<?=$sGallery['title']?>">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Введите описание <font color="red">*</font></label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Описание" id="meta_d" name="meta_d" value="<?=$sGallery['meta_d']?>">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Введите ключевые слова через запятую <font color="red">*</font></label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Ключевые слова" id="meta_k" name="meta_k" value="<?=$sGallery['meta_k']?>">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label>Введите сопроводительный текст к галереи </label>
+														<div class="input-group">
+															<textarea class="form-control" rows="5" name="text" id="text"><?=$sGallery['text']?></textarea>
+															<script type="text/javascript">
+																CKEDITOR.replace( 'text' );
+															</script>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label>Введите символьный код ссылки (оставте пустым и он будет сгенерирован автоматически)</label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Введите символьный код ссылки (оставте пустым и он будет сгенерирован автоматически)" id="code" name="code" value="<?=$sGallery['code']?>">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Введите приоритет</label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-sort-amount-asc "></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Приоритет" id="priority" name="priority" value="<?=$sGallery['priority']?>">
+														</div>
+													</div>
+													<?/*<div class="form-group">
+														<label>Выберете фотографии</label>
+															<div class="input-group">
+																<input type="file" class="default" multiple="true" name="filesToUpload[]" id="filesToUpload"/>
+															</div>
+													</div>*/?>
+									</div>
+								</div>
+								
+								<div class="tab-pane glyphicons-demo" id="tab_1">
+									<div class="form-group" id="photo">
+										<?$sPhoto = selectPhoto($id);
+										$n = 0;?>
+										<?foreach ($sPhoto as $item):?>
+										<div class="col-md-4 col-sm-6 mix category_1" style="margin-bottom:15px;">
+											<div class="mix-inner">
+												<img class="img-responsive" src="http://<?=$_SERVER['SERVER_NAME']?>/phpScripts/phpThumb/phpThumb.php?src=/images/photogallery/<?=$item["img"]?>&w=331&h=220&far=1&bg=ffffff&f=jpg">
+												<input name="img[<?=$n?>]" type="hidden" value="<?=$item["img"]?>">
+												
+												<div class="mix-details" style="margin-bottom:15px;">
+													<label>Текст фото:</label>
+													<input name="text_photo[<?=$n?>]" type="text" value="<?=$item["text"]?>" class="form-control" placeholder="Текста фото нет">
+													
+													<label>Приоритет фото:</label>
+													<br><input name="priority_photo[<?=$n?>]" type="text" class="form-control" placeholder="Сортировка фото" value="<?=$item["priority"]?>">
+													
+													<br>
+													<input type="checkbox" name="del_photo[<?=$n?>]" value="1">Удалить
+													<br>
+													
+													<input name="id_photo[<?=$n?>]" type="hidden" value="<?=$item["id"]?>">
+												</div>
+											</div>
+										</div>
+											<?$n++;?>
+										<?endforeach;?>
+										<input name="n" type="hidden" value="<?=$n?>">
+									</div>
+									
+									<div class="form-group" id="photo">
+									<script>
+										var i=0;
+										function addInput() {
+											var div = document.getElementById('photo');
+											var input=document.createElement('input');
+											var inputtext=document.createElement('input');
+											var inputpriority=document.createElement('input');
+											var p=document.createElement('p');
+											var label=document.createElement('label');
+											var text=document.createTextNode('Фото:');
+											var text2=document.createTextNode('Описание фото:');
+											var text3=document.createTextNode('Приоритет фото:');
+											var br=document.createElement('br');
+											var br2=document.createElement('br');
+											var br3=document.createElement('br');
+											var br4=document.createElement('br');
+											var br5=document.createElement('br');
+											
+											p.id = 'noleft';
+											
+											input.type = 'file';
+											input.name = 'photo['+i+']';
+											
+											inputtext.type = 'text';
+											inputtext.name = 'new_text_photo['+i+']';
+											inputtext.className = 'form-control';
+											
+											inputpriority.type = 'text';
+											inputpriority.name = 'new_priority_photo['+i+']';
+											inputpriority.className = 'form-control';
+											
+											div.appendChild(p);
+											p.appendChild(label);
+											label.appendChild(text);
+											label.appendChild(br);
+											label.appendChild(input);
+											label.appendChild(br2);
+											label.appendChild(text2);
+											label.appendChild(br3);
+											label.appendChild(inputtext);
+											label.appendChild(br4);
+											label.appendChild(text3);
+											label.appendChild(br5);
+											label.appendChild(inputpriority);
+											i++;
+										}
+									</script>
+									</div>
+									<button type="button" class="btn red" onClick="javascript:addInput()" style="clear: left;float: left; margin-left: 15px;">Добавить фото +1</button>
+								</div>
+							</div>
+					</div>
+							<br>
+							<div class="form-actions">
+								<button type="submit" class="btn green" name="submit">Сохранить</button>
+								<button type="submit" class="btn blue" name="submit1">Обновить</button>
+								<button type="button" class="btn red" onClick='location.href="/adminius/index.php?code=gallery"'>Отмена</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		<?}?>
+	<?}else{?>
+		<?if (isset($_GET["limit"])) {
+			$num = clearData($_GET["limit"], "i");
+		}else{
+			$num = 9;
+		}
+		if (isset($_GET["page"])) {
+			$page = clearData($_GET["page"], "i");
+		}else{
+			$page = 1;
+		}
+		if (isset($_GET["search"])) {
+				$search = $_GET["search"];
+		}else{
+				$search = "";
+		}
+		?>
+			<div class="portlet box purple">
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="fa fa-cogs"></i>Управление фото галереей
+								</div>
+								<div class="tools">
+									<a href="javascript:;" class="collapse"></a>
+									<a href="javascript:;" class="reload"></a>
+								</div>
+							</div>
+							<div class="portlet-body">
+								<div class="table-toolbar">
+									<div class="btn-group">
+										<button id="sample_editable_1_new" class="btn green" onClick='location.href="/adminius/index.php?code=gallery&action=add&id=<?=$_GET["id"]?>"'>
+										Добавить <i class="fa fa-plus"></i>
+										</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 col-sm-12">
+										<div id="sample_1_length" class="dataTables_length">
+											<label>
+												<select size="1" name="limit" aria-controls="sample_1"  class="form-control input-small"  onchange='location.href="index.php?code=<?=$_GET['code']?><?if($_GET['search']){?>&search=<?=$_GET['search']?><?}?><?if($_GET['page']){?>&page=<?=$_GET['page']?><?}?>&limit="+this.value'>
+													<option value="9" <?if ($num == 9) echo "selected='selected'";?>>9</option>
+													<option value="18" <?if ($num == 18) echo "selected='selected'";?>>18</option>
+													<option value="36" <?if ($num == 36) echo "selected='selected'";?>>36</option>
+													<option value="72" <?if ($num == 72) echo "selected='selected'";?>>72</option>
+												</select>
+											</label>
+										</div>
+									</div>
+									<div style="float:right;">
+										<div class="dataTables_filter" id="sample_1_filter">
+											<div class="col-md-6">
+												<div class="input-group input-medium">
+													<form action="/adminius/index.php" method="GET" style=" display: inline-table;">
+														<input name="code" type="hidden" value="gallery"/>
+														<input type="text" class="form-control" placeholder="поиск" name="search">
+														<span class="input-group-btn">
+															<button class="btn blue" type="sumbit"><font><font>Поиск</font></font></button>
+														</span>
+													</form>
+												</div>		
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="tab-pane" id="tab_2">
+									<!-- BEGIN FILTER -->
+									<div class="filter-v1 margin-top-10">
+										<div class="row mix-grid thumbnails">
+										<?$select_gallery = selectAllGallery($page, $num, $_GET["id"], $search);
+										$n=1+$start;
+										if($select_gallery){
+											foreach ($select_gallery as $item):?>
+												<? $img_gallary = selectImgGalleryID($item['id']);?>
+												<div class="col-md-4 col-sm-6 mix category_1" style="margin-bottom:15px;">
+													<div class="mix-inner" style="min-height: 450px;">
+														<a href="/adminius/index.php?code=gallery&action=edit&id=<?=$item["id"]?>" style="text-decoration:none;"><img class="img-responsive" src="http://<?=$_SERVER['SERVER_NAME']?>/phpScripts/phpThumb/phpThumb.php?src=/images/photogallery/<?=$img_gallary;?>&w=334&h=222&far=1&bg=ffffff&f=jpg" alt="<?=$item['title']?>"></a>
+														<div class="mix-details" style="margin-bottom:15px;">
+															<a href="/adminius/index.php?code=gallery&action=edit&id=<?=$item["id"]?>" style="text-decoration:none;"><h3><?=$item['title']?></h3></a>
+															<a class="mix-link">
+															<i class="fa fa-link"></i>
+															<?=$item['code']?>-<?=$item['id']?>.html
+															</a>
+														</div>
+														
+														<?=$item["active" ] == 1 ? "<span class='label label-sm label-success'>Активная</span>":"<span class='label label-sm label-warning'>Не активная</span>"; ?>
+														<?=$item["status" ] == 1 ? "<span class='label label-sm label-warning'>Скрытая</span>":"<span class='label label-sm label-success'>Опубликована</span>"; ?>
+														<a class="btn btn-xs blue btn-editable" data-id="1" href="/adminius/index.php?code=gallery&action=edit&id=<?=$item["id"]?>"><i class="fa fa-pencil"></i> Edit</a> 
+														<?if ($access["del"] == 1):?>
+															<form action="index.php" method="POST" name="delform<?=$item['id']?>" style="display:none;">
+																<input name="func" type="hidden" value="gallery">
+																<input name="id" type="hidden" value="<?=$item['id']?>">
+															</form>
+														<a class="btn btn-xs red btn-removable" data-id="1" href="javascript:if(confirm('Вы уверены?')){delform<?=$item['id']?>.submit();}"><i class="fa fa-times"></i> Delete</a>
+														<?endif;?>
+													
+													</div>
+												</div>
+											<?endforeach;?>
+										<?}else{?>
+											<div style="margin-left:15px;"><h3>Нет фото галереи :(</h3></div>
+										<?}?>
+										</div>
+									</div>
+									<!-- END FILTER -->
+								</div>
+					<?include($_SERVER['DOCUMENT_ROOT'].'/adminius/templates/pagenav.tpl.php');?>
+				</div>
+	<?}?>

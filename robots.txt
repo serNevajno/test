@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /adminius/
+Sitemap: https://dobrayashina.ru/sitemap.xml
+
+User-agent: Googlebot
+Disallow: /adminius/
+Sitemap: https://dobrayashina.ru/sitemap.xml
+
+User-agent: Yandex
+Disallow: /adminius/
+Sitemap: https://dobrayashina.ru/sitemap.xml
+
+Host: https://dobrayashina.ru

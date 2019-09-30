@@ -1,0 +1,96 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^orders-([0-9]+).html$ /index.php?code=orders&id=$1 [L]
+RewriteRule ^([^/]*).html$ /index.php?code=$1 [L]
+RewriteRule ^([^/]*)/$ /index.php?categories_code=$1 [L,QSA]
+RewriteRule ^news/([A-Za-z-_0-9]+)-([0-9]+).html$ /index.php?code=news&id_news=$2 [L]
+
+RewriteRule ^search/([^/]*)/$ /index.php?code=search&query=$1 [L]
+RewriteRule ^tyres/([^/]*)-([0-9]+).html$ /index.php?categories_code=tyres&product_code=$1&id=$2 [L]
+RewriteRule ^tyres/([^/]*)/$ /index.php?categories_code=tyres&section_code=$1 [L]
+RewriteRule ^disk/([^/]*)-([0-9]+).html$ /index.php?categories_code=disk&product_code=$1&id=$2 [L]
+RewriteRule ^([^/]*)/([^/]*)-([0-9]+).html$ /index.php?categories_code=$1&product_code=$2&id=$3 [L]
+
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
+RewriteRule ^index\.php$ http://dobrayashina.ru/ [R=301,L]
+
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
+RewriteRule ^index\.html$ http://dobrayashina.ru/ [R=301,L]
+
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+### Сжать ответ сервера для перечисленных MIME типов
+<ifModule mod_deflate.c>
+  <IfModule mod_filter.c>
+      AddOutputFilterByType DEFLATE text/plain text/html
+      AddOutputFilterByType DEFLATE text/css
+      AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+      AddOutputFilterByType DEFLATE text/xml application/xml application/xhtml+xml application/rss+xml
+      AddOutputFilterByType DEFLATE application/json
+      AddOutputFilterByType DEFLATE application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon
+  </ifModule>
+</ifModule>
+
+### Подсказать браузеру схему кеширования через заголовки в ответе сервера
+<ifModule mod_headers.c>
+    # 43200 - день, 604800 - неделя, 2592000 - месяц
+    <FilesMatch "\.(html|js|css)$">
+			Header set Cache-Control "max-age=3600"
+        #Header unset Last-Modified
+    </FilesMatch>
+    <Files *.txt>
+			Header add Cache-Control "max-age=3600"
+    </Files>
+    <FilesMatch "\.(flv|swf|ico|gif|jpg|jpeg|png)$">
+			Header set Cache-Control "max-age=7200"
+    </FilesMatch>
+    <FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$">
+			# отключить кэширование
+			Header unset Cache-Control
+    </FilesMatch>
+	#############################################################
+    # Serve gzip compressed CSS files if they exist
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.css" "$1\.css\.gz" [QSA]
+
+    # Serve gzip compressed JS files if they exist
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.js" "$1\.js\.gz" [QSA]
+
+
+    # Serve correct content types, and prevent mod_deflate double gzip.
+    RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+    RewriteRule "\.js\.gz$" "-" [T=text/javascript,E=no-gzip:1]
+
+
+    <FilesMatch "(\.js\.gz|\.css\.gz)$">
+      # Serve correct encoding type.
+      Header append Content-Encoding gzip
+
+      # Force proxies to cache gzipped &
+      # non-gzipped css/js files separately.
+      Header append Vary Accept-Encoding
+    </FilesMatch>
+
+    <FilesMatch "\.(js|css|xml|gz)$">
+        Header append Vary: Accept-Encoding
+    </FilesMatch>
+
+### Удалить заголовок ETag (иначе есть проблемы с кешированием при включенном сжатии)
+    Header unset ETag
+
+    Header set X-XSS-Protection "1; mode=block"
+    #Header set X-Frame-Options "DENY"
+
+    #Header always edit Set-Cookie (.*) "$1; HTTPOnly"
+    #Header always edit Set-Cookie (.*) "$1; Secure"
+
+    Header set X-Content-Type-Options nosniff
+</IfModule>
+
+FileETag None

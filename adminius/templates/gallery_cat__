@@ -1,0 +1,226 @@
+<?if (isset($_GET["action"])){?>
+	<?if($_GET["action"] == "add"){?>
+			<script type="text/javascript">
+				function checkForm() {
+					var name = document.getElementById("name");
+
+					if (!name.value) {
+						alert('Введите имя');
+						return false;
+					}
+				}
+
+				window.onload = function () {
+					var form = document.getElementById("myForm");
+					form.onsubmit = checkForm;
+				}
+			</script>
+<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Добавление страницы...</h2>
+					<br>
+					<div class="tabbable tabbable-custom boxless">
+					<form role="form" action="" enctype="multipart/form-data" method="POST" name="form" id="myForm">
+						<input name="func" type="hidden" value="gallery_cat">
+						<input name="user_id" type="hidden" value="<?=$user["id"]?>">
+							
+							<div class="tab-content">
+									<div class="form-body">
+													<div class="form-group">
+														<label>Введите название <font color="red">*</font></label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-reorder"></i>
+															</span>
+															<input type="text" class="form-control" id="name" name="name" placeholder="Название">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Введите символьный код ссылки (оставте пустым и он будет сгенерирован автоматически)</label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Введите символьный код ссылки (оставте пустым и он будет сгенерирован автоматически)" id="code" name="code">
+														</div>
+													</div>
+													<div class="form-group">
+											<div class="thumbnail" style="width: 310px;">
+															<img src="http://www.placehold.it/310x170/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+											</div>
+											<div class="margin-top-10 fileupload fileupload-new" data-provides="fileupload">
+												<div class="input-group input-group-fixed">
+													<span class="input-group-btn">
+														<span class="uneditable-input">
+															<i class="fa fa-file fileupload-exists"></i>
+															<span class="fileupload-preview"></span>
+														</span>
+													</span>
+													<span class="btn default btn-file">
+														<span class="fileupload-new">
+															<i class="fa fa-paper-clip"></i>Выберите файл
+														</span>
+														<span class="fileupload-exists">
+															<i class="fa fa-undo"></i> Заменить
+														</span>
+														<input type="file" class="default" id="img" name="img"/>
+													</span>
+													<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Удалить</a>
+												</div>
+											</div>	
+										</div>
+									</div>
+							</div>
+						<div class="form-actions">
+							<button type="submit" class="btn blue" name="submit">Добавить</button>
+							<button type="button" class="btn red" onClick='location.href="/adminius/gallery_cat.html"'>Отмена</button>
+						</div>
+					</form>
+					</div>
+				</div>
+			</div>
+	<?}elseif($_GET["action"] == "edit"){?>
+			<script type="text/javascript">
+				function checkForm() {
+					var name = document.getElementById("name");
+
+					if (!name.value) {
+						alert('Введите имя');
+						return false;
+					}
+				}
+
+				window.onload = function () {
+					var form = document.getElementById("myForm");
+					form.onsubmit = checkForm;
+				}
+			</script>
+		<?$item = selectCatGalleryById($_GET["id"]);?>
+		<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Добавление страницы...</h2>
+					<br>
+					<div class="tabbable tabbable-custom boxless">
+					<form role="form" action="" enctype="multipart/form-data" method="POST" name="form" id="myForm">
+						<input name="func" type="hidden" value="gallery_cat">
+						<input name="id" type="hidden" value="<?=$_GET["id"]?>">
+						<input name="img_old" type="hidden" value="<?=$item["img"]?>">
+						
+							<div class="tab-content">
+									<div class="form-body">
+													<div class="form-group">
+														<label>Введите название <font color="red">*</font></label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-reorder"></i>
+															</span>
+															<input type="text" class="form-control" id="name" name="name" placeholder="Название" value="<?=$item["name"]?>">
+														</div>
+													</div>
+													<div class="form-group">
+														<label>Введите символьный код ссылки (оставте пустым и он будет сгенерирован автоматически)</label>
+														<div class="input-group">
+															<span class="input-group-addon">
+																<i class="fa fa-cogs"></i>
+															</span>
+															<input type="text" class="form-control" placeholder="Введите символьный код ссылки (оставте пустым и он будет сгенерирован автоматически)" id="code" name="code" value="<?=$item["code"]?>">
+														</div>
+													</div>
+													<div class="form-group">
+											<div class="thumbnail" style="width: 310px;">
+												<?if ($item["img"]):?>
+													<img src="/images/photogallery/<?=$item["img"]?>" alt="<?=$item["name"]?>">
+												<?else:?>
+													<img src="/images/no_image.gif" alt="Нет картинки" title="Нет картинки">
+												<?endif;?>
+											</div>
+											<div class="margin-top-10 fileupload fileupload-new" data-provides="fileupload">
+												<div class="input-group input-group-fixed">
+													<span class="input-group-btn">
+														<span class="uneditable-input">
+															<i class="fa fa-file fileupload-exists"></i>
+															<span class="fileupload-preview"></span>
+														</span>
+													</span>
+													<span class="btn default btn-file">
+														<span class="fileupload-new">
+															<i class="fa fa-paper-clip"></i>Выберите файл
+														</span>
+														<span class="fileupload-exists">
+															<i class="fa fa-undo"></i> Заменить
+														</span>
+														<input type="file" class="default" id="img" name="img"/>
+													</span>
+													<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Удалить</a>
+												</div>
+											</div>	
+										</div>
+									</div>
+							</div>
+						<div class="form-actions">
+							<button type="submit" class="btn blue" name="submit">Добавить</button>
+							<button type="button" class="btn red" onClick='location.href="/adminius/index.php?code=gallery_cat"'>Отмена</button>
+						</div>
+					</form>
+					</div>
+				</div>
+			</div>	
+	<?}?>
+<?}else{?>
+					<!-- BEGIN SAMPLE TABLE PORTLET-->
+					<div class="portlet box purple">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-cogs"></i>Управление страницами
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse"></a>
+								<a href="javascript:;" class="reload"></a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<div class="table-toolbar">
+								<div class="btn-group">
+									<button id="sample_editable_1_new" class="btn green" onClick='location.href="/adminius/index.php?code=gallery_cat&action=add"'>
+										Добавить <i class="fa fa-plus"></i>
+									</button>
+								</div>
+							</div>
+							<div class="table-scrollable">
+								<table class="table table-bordered table-striped table-condensed flip-content" id="sample_1">
+									<thead  class="flip-content">
+										<tr>
+											<th>№</th>
+											<th>Имя</th>
+											<th>Символьный код</th>
+											<th>Действия</th>
+										</tr>
+									</thead>
+									<tbody role="alert" aria-live="polite" aria-relevant="all">
+										<?$select_section = selectCatGallery();
+										$n=1;
+										foreach ($select_section as $item):?>
+											<tr class="odd">
+												<td class=" sorting_1"><?=$n?></td>
+												<td class=""><a href="/adminius/index.php?code=gallery&id=<?=$item["id"]?>"><?=$item["name"]?></a></td>
+												<td class=""><?=$item["code"]?></td>
+												<td class="">
+													<a class="btn btn-xs blue btn-editable" data-id="1" href="/adminius/index.php?code=gallery_cat&action=edit&id=<?=$item["id"]?>"><i class="fa fa-pencil"></i> Edit</a> 
+														<form action="index.php" method="POST" name="delform<?=$item['id']?>" style="display:none;">
+															<input name="func" type="hidden" value="gallery_cat">
+															<input name="id" type="hidden" value="<?=$item['id']?>">
+														</form>
+														<a class="btn btn-xs red btn-removable" data-id="1" href="javascript:if(confirm('Вы уверены?')){delform<?=$item['id']?>.submit();}"><i class="fa fa-times"></i> Delete</a>
+												</td>
+											</tr>
+											<?$n++;?>
+										<?endforeach;?>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- END EXAMPLE TABLE PORTLET-->
+<?}?>
